@@ -6,5 +6,6 @@ table = Table(
     "user_start_table",
     metadata_obj,
     Column("username",String,primary_key=True),
-    Column("sub",Boolean)
+    Column("sub",Boolean),
+    Column("date",String)
 )

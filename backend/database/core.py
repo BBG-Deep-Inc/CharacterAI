@@ -98,4 +98,17 @@ async def is_user_subbed(username:str) -> bool:
                 return data
             raise NameError("User not found") # поидеи никогда не произойдет 
         except exc.SQLAlchemyError as conn:
-            raise exc.SQLAlchemyError("Error while executing")          
+            raise exc.SQLAlchemyError("Error while executing")     
+ 
+async def set_sub_back_to_false(username:str):
+    async with AsyncSession(async_engine) as conn:
+        async with conn.begin():
+            try:
+                stmt = table.update().where(table.c.username == username).values(
+                    sub = False,
+                    date = ""
+                )
+                await conn.execute(stmt)
+            except exc.SQLAlchemyError:
+                raise exc.SQLAlchemyError("Error while executing")    
+                    
