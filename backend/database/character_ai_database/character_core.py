@@ -37,3 +37,34 @@ AsyncSessionLocal = sessionmaker(
 async def create_table():
     async with async_engine.begin() as conn:
         await conn.run_sync(metadata_obj.create_all)
+
+
+async def drop_table():
+    async with async_engine.begin() as conn:
+        await conn.run_sync(metadata_obj.drop_all) 
+        
+
+async def get_all_data() -> List:
+    async with AsyncSession(async_engine) as conn:
+        try:
+            stmt = select(character_table)
+            res = await conn.execute(stmt)
+            return list(res.fetchall())
+        except exc.SQLAlchemyError:
+            raise exc.SQLAlchemyError("Error while executing")
+
+
+        
+async def create_model(username:str,model_name:str,promt:str):
+    async with AsyncSession(async_engine) as conn:
+        async with conn.begin():
+            try:
+                stmt = character_table.insert().values(
+                   username = username,
+                   name = model_name,
+                   promt = promt,
+                   id = str(uuid.uuid4()) 
+                )
+                await conn.execute(stmt)
+            except exc.SQLAlchemyError:
+                raise exc.SQLAlchemyError("Error while executing")
