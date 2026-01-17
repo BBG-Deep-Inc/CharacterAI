@@ -78,4 +78,13 @@ async def count_models(username:str) -> int:
             return len(data)
         except exc.SQLAlchemyError:
             raise exc.SQLAlchemyError("Error while executing")       
+
+async def delete_model(model_id:str):
+    async with AsyncSession(async_engine) as conn:
+        async with conn.begin():
+            try:
+                stmt = character_table.delete(character_table).where(character_table.c.id == model_id)
+                await conn.execute(stmt)
+            except exc.SQLAlchemyError:
+                raise exc.SQLAlchemyError("Error while executing")
   
