@@ -4,3 +4,4 @@ venv/
 env
 /env
 env
+backend/database/character_ai_database/.env
