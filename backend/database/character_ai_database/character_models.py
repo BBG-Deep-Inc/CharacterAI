@@ -8,5 +8,5 @@ character_table = Table(
     Column("username",String),
     Column("name",String),
     Column("promt",String),
-    Column("id",primary_key=True)
+    Column("id",String,primary_key=True)
 )

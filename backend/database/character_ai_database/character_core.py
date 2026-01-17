@@ -72,9 +72,10 @@ async def create_model(username:str,model_name:str,promt:str):
 async def count_models(username:str) -> int:
     async with AsyncSession(async_engine) as conn:
         try:
-            stmt = character_table.select(character_table.name).where(character_table.c.username == username)
+            stmt = select(character_table.c.name).where(character_table.c.username == username)
             res = await conn.execute(stmt)
             data = res.fetchall()
             return len(data)
         except exc.SQLAlchemyError:
             raise exc.SQLAlchemyError("Error while executing")       
+  
