@@ -88,3 +88,17 @@ async def delete_model(model_id:str):
             except exc.SQLAlchemyError:
                 raise exc.SQLAlchemyError("Error while executing")
   
+#write get model promt and get user models
+
+async def get_user_models(username:str) -> List[str]:
+    async with AsyncSession(async_engine) as conn:
+        try:
+            stmt = select(character_table.c.name).where(character_table.c.username == username)
+            res = await conn.execute(stmt)
+            data = res.fetchall()
+            result:List[str] = []
+            for dt in data:
+                result.append(str(dt[0]))
+            return result    
+        except exc.SQLAlchemyError:
+            raise exc.SQLAlchemyError("Error while executing")
