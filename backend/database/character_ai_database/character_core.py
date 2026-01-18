@@ -90,6 +90,7 @@ async def delete_model(model_id:str):
   
 #write get model promt and get user models
 
+#version 1
 async def get_user_models(username:str) -> List[str]:
     async with AsyncSession(async_engine) as conn:
         try:
@@ -100,5 +101,29 @@ async def get_user_models(username:str) -> List[str]:
             for dt in data:
                 result.append(str(dt[0]))
             return result    
+        except exc.SQLAlchemyError:
+            raise exc.SQLAlchemyError("Error while executing")
+#version 2
+async def get_user_models_2(username:str) -> dict:
+    async with AsyncSession(async_engine) as conn:
+        try:
+            stmt = select(character_table.c.name,character_table.c.id).where(character_table.c.username == username)
+            res = await conn.execute(stmt)
+            data = res.fetchall()
+            result = {}
+            for dt in data:
+                result[str(dt[0])] = str(dt[1])
+            return result    
+        except exc.SQLAlchemyError:
+            raise exc.SQLAlchemyError("Error while executing") 
+
+async def get_model_promt_by_id(model_id:str) -> str:
+    async with AsyncSession(async_engine) as conn:
+        try:
+            stmt = select(character_table.c.promt).where(character_table.id == model_id)
+            res = await conn.execute(stmt)
+            data = res.scalar_one_or_none()
+            if data is not None:
+                return data
         except exc.SQLAlchemyError:
             raise exc.SQLAlchemyError("Error while executing")
