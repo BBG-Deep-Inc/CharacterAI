@@ -62,5 +62,5 @@ async def subscribe_handler(message:Message):
 
 @router.message(F.text == "Back")
 async def back_handler(message:Message):
-    pass            
+    await message.answer(reply_markup=kb.main_keyborad)           
         
