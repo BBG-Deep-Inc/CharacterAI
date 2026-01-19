@@ -3,7 +3,7 @@ from aiogram.filters import CommandStart,Command
 from aiogram.types import Message,File,Video,PhotoSize
 import aiogram
 import keyboards as kb 
-from backend.database.core import is_user_exists,create_user
+from backend.database.core import is_user_exists,create_user,is_user_subbed
 
 router = Router()
 
@@ -24,5 +24,21 @@ async def start_handler(message:Message):
     user_ex = await is_user_exists(str(user_id))
     if not user_ex:
         await create_user(str(user_id))
-    await message.answer(welcome_text)
+    await message.answer(welcome_text,reply_markup=kb.main_keyborad)
+
+@router.messgae(F.text == "Profile")
+async def profile_handler(message:Message):
+    user_id = str(message.from_user.id)
+    user_subbed = await  is_user_subbed(user_id)
+    username = str(message.from_user.username)
+    profile_text = f"""Profile of {username}
+                       Subscription : {user_subbed}
+        """
+    if not user_subbed:
+        await message.answer(
+            text = profile_text,
+            reply_markup=kb.profile_key_board
+        )
+    else:
+        await message.asnwer(text = profile_text)
         
