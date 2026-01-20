@@ -1,5 +1,5 @@
 from sqlalchemy import select,exc,String,cast
-from character_models import metadata_obj,character_table
+from backend.database.character_ai_database.character_models import metadata_obj,character_table
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from datetime import datetime,timedelta
 from typing import List,Optional

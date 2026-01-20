@@ -3,13 +3,26 @@ from aiogram.filters import CommandStart,Command
 from aiogram.types import Message,File,Video,PhotoSize
 import aiogram
 import keyboards as kb
+
+import sys
+import os
+
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(current_dir) 
+
+sys.path.insert(0, project_root)
+
+
 from backend.database.core import is_user_exists,create_user,is_user_subbed
 
 router = Router()
 
 #User states
 answer_state = False
-model_name = None
+cur_model_name = None
+
+
 
 welcome_text = """Welcome to Character AI – Your Portal to Endless Conversations!
 
@@ -30,7 +43,7 @@ async def start_handler(message:Message):
         await create_user(str(user_id))
     await message.answer(welcome_text,reply_markup=kb.main_keyborad)
 
-@router.messgae(F.text == "Profile")
+@router.message(F.text == "Profile")
 async def profile_handler(message:Message):
     user_id = str(message.from_user.id)
     user_subbed = await  is_user_subbed(user_id)
@@ -74,4 +87,4 @@ async def chat_handler(message:Message):
     user_id = message.from_user.id
     user_keyborad = kb.create_charccter_keyboead(str(user_id))
     await message.answer("Choose a character",reply_markup=user_keyborad)           
-        
+    
