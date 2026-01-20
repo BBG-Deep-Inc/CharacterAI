@@ -2,10 +2,14 @@ from aiogram import Bot,Dispatcher,F,Router
 from aiogram.filters import CommandStart,Command
 from aiogram.types import Message,File,Video,PhotoSize
 import aiogram
-import keyboards as kb 
+import keyboards as kb
 from backend.database.core import is_user_exists,create_user,is_user_subbed
 
 router = Router()
+
+#User states
+answer_state = False
+model_name = None
 
 welcome_text = """Welcome to Character AI – Your Portal to Endless Conversations!
 
@@ -62,5 +66,12 @@ async def subscribe_handler(message:Message):
 
 @router.message(F.text == "Back")
 async def back_handler(message:Message):
-    await message.answer(reply_markup=kb.main_keyborad)           
+    await message.answer(reply_markup=kb.main_keyborad)  
+     
+
+@router.message(F.text == "Chat")
+async def chat_handler(message:Message):
+    user_id = message.from_user.id
+    user_keyborad = kb.create_charccter_keyboead(str(user_id))
+    await message.answer("Choose a character",reply_markup=user_keyborad)           
         
