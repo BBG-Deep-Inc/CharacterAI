@@ -86,5 +86,8 @@ async def back_handler(message:Message):
 async def chat_handler(message:Message):
     user_id = message.from_user.id
     user_keyborad = kb.create_charccter_keyboead(str(user_id))
-    await message.answer("Choose a character",reply_markup=user_keyborad)           
+    await message.answer("Choose a character",reply_markup=user_keyborad)
+
+#нужно сделать обработчики для дефолтных моделей(типо встроенные персонажи)  
+             
     
