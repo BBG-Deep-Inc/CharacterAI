@@ -112,5 +112,5 @@ async def set_sub_back_to_false(username:str):
             except exc.SQLAlchemyError:
                 raise exc.SQLAlchemyError("Error while executing")    
                     
-def test():
-    pass 
+def get_user_sub_date_end(username:str) -> str:
+    pass
