@@ -112,5 +112,14 @@ async def set_sub_back_to_false(username:str):
             except exc.SQLAlchemyError:
                 raise exc.SQLAlchemyError("Error while executing")    
                     
-def get_user_sub_date_end(username:str) -> str:
-    pass
+async def get_user_sub_date_end(username:str) -> str:
+    async with AsyncSession(async_engine) as conn:
+        try:
+            stmt = select(table.c.date).where(table.c.username == username)
+            res = await conn.execute(stmt)
+            data = res.scalar_one_or_none()
+            if data is not None:
+                return str(data)
+            return ""
+        except exc.SQLAlchemyError:
+            raise exc.SQLAlchemyError("Error while executing")
